@@ -50,6 +50,13 @@
 - name: Add info if ok execution
   block:
 
+  - name: ansible copy file from remote to local.
+    fetch:
+      src: /tmp/efficiencie.exec.txt
+      dest: /tmp/
+      flat: yes
+    delegate_to: localhost
+
   - name: Get timer ok execution previous
     set_fact: 
       diferencia_previa: "{{ q('ansible.builtin.ini', 'ultima_ejecucion_ok_duracion', section=playbook_efficiencie_name+'-'+ansible_host_exec, file='/tmp/efficiencie.exec.txt', re=True) }} "
