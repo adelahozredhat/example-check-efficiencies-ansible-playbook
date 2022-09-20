@@ -8,7 +8,7 @@
     diferencia: "{{ fin | int - inicio | int }}"
 
 - name: Ensure multiple values "beverage=coke" and "beverage=pepsi" are in section "[drinks]" in specified file
-  ini_file:
+  community.general.ini_file:
     path: /tmp/efficiencie.exec.txt
     section: "{{playbook_efficiencie_name}}-{{ansible_host_exec}}"
     option: inicio
@@ -18,7 +18,7 @@
   delegate_to: localhost
 
 - name: Ensure multiple values "beverage=coke" and "beverage=pepsi" are in section "[drinks]" in specified file
-  ini_file:
+  community.general.ini_file:
     path: /tmp/efficiencie.exec.txt
     section: "{{playbook_efficiencie_name}}-{{ansible_host_exec}}"
     option: fin
@@ -28,7 +28,7 @@
   delegate_to: localhost
 
 - name: Ensure multiple values "beverage=coke" and "beverage=pepsi" are in section "[drinks]" in specified file
-  ini_file:
+  community.general.ini_file:
     path: /tmp/efficiencie.exec.txt
     section: "{{playbook_efficiencie_name}}-{{ansible_host_exec}}"
     option: diferencia
@@ -38,7 +38,7 @@
   delegate_to: localhost
 
 - name: Ensure multiple values "beverage=coke" and "beverage=pepsi" are in section "[drinks]" in specified file
-  ini_file:
+  community.general.ini_file:
     path: /tmp/efficiencie.exec.txt
     section: "{{playbook_efficiencie_name}}-{{ansible_host_exec}}"
     option: resultado
@@ -60,7 +60,7 @@
     when: diferencia_previa and (diferencia_previa|length > 0) and (diferencia | int - diferencia_previa[0] | int) != 0
 
   - name: Ensure multiple values "beverage=coke" and "beverage=pepsi" are in section "[drinks]" in specified file
-    ini_file:
+    community.general.ini_file:
       path: /tmp/efficiencie.exec.txt
       section: "{{playbook_efficiencie_name}}-{{ansible_host_exec}}"
       option: porcentaje
@@ -71,7 +71,7 @@
     when: porcentaje is defined
 
   - name: Ensure multiple values "beverage=coke" and "beverage=pepsi" are in section "[drinks]" in specified file
-    ini_file:
+    community.general.ini_file:
       path: /tmp/efficiencie.exec.txt
       section: "{{playbook_efficiencie_name}}-{{ansible_host_exec}}"
       option: porcentaje
@@ -82,7 +82,7 @@
     when: porcentaje is undefined
 
   - name: Ensure multiple values "beverage=coke" and "beverage=pepsi" are in section "[drinks]" in specified file
-    ini_file:
+    community.general.ini_file:
       path: /tmp/efficiencie.exec.txt
       section: "{{playbook_efficiencie_name}}-{{ansible_host_exec}}"
       option: ultima_ejecucion_ok_duracion
