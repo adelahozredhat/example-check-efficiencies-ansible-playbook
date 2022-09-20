@@ -1,0 +1,21 @@
+---
+- name: Get name all hosts in inventorie
+  set_fact:
+    list_sections: "{{ list_sections + hostvars[item]['list_sections'] }}"
+  with_items: "{{ groups['all'] }}"
+
+- name: Result all efficience tests
+  ansible.builtin.debug: 
+    msg: "{{ q('ansible.builtin.ini', '.*', section=item, file='/tmp/efficiencie.exec.txt', re=True) }} "
+  loop: "{{list_sections}}"
+
+- name: Creating a Dictionary in a Task 
+  set_fact: 
+    # Dictionary with some value
+    mylist: "{{ mylist | default([]) + [{ 'Sections': item, 'diferencia':q('ansible.builtin.ini', 'diferencia', section=item, file='/tmp/efficiencie.exec.txt', re=True), 'resultado':q('ansible.builtin.ini', 'resultado', section=item, file='/tmp/efficiencie.exec.txt', re=True), 'porcentaje':q('ansible.builtin.ini', 'porcentaje', section=item, file='/tmp/efficiencie.exec.txt', re=True)}]}}"
+  loop: "{{list_sections}}"
+
+- name: Save Stats for next playbooks in the workflow
+  set_stats:
+    data:
+      result_efficiencie: "{{mylist}}"

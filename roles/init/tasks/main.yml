@@ -1,0 +1,8 @@
+---
+- name: Get name all hosts in inventorie
+  set_fact:
+    ansible_host_exec: "{{ ansible_host }}"
+
+- name: Get epoch init execution
+  set_fact:
+    inicio: "{{ lookup('pipe','date +%s%3N') }}"

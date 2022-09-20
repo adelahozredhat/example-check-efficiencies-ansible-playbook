@@ -1,0 +1,22 @@
+---
+- name: Init List Sections in all hosts for read file ini test efficencie
+  hosts: all
+  gather_facts: no
+  tasks:
+
+    - name: Init fact list sections in all hosts
+      set_fact:
+        list_sections: []
+
+- name: Execute playbook2.
+  ansible.builtin.import_playbook: playbook2.yml
+
+- name: Execute playbook3.
+  ansible.builtin.import_playbook: playbook3.yml
+
+- name: This read result eficciencie all test for collections
+  hosts: localhost
+  gather_facts: no
+  roles:
+    - agregate
+    

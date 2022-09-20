@@ -1,0 +1,100 @@
+---
+- name: Get epoch end execution
+  set_fact:
+    fin: "{{ lookup('pipe','date +%s%3N') }}"
+
+- name: Get timer execution
+  set_fact:
+    diferencia: "{{ fin | int - inicio | int }}"
+
+- name: Ensure multiple values "beverage=coke" and "beverage=pepsi" are in section "[drinks]" in specified file
+  community.general.ini_file:
+    path: /tmp/efficiencie.exec.txt
+    section: "{{playbook_efficiencie_name}}-{{ansible_host_exec}}"
+    option: inicio
+    values:
+      - "{{inicio}}"
+    state: present
+  delegate_to: localhost
+
+- name: Ensure multiple values "beverage=coke" and "beverage=pepsi" are in section "[drinks]" in specified file
+  community.general.ini_file:
+    path: /tmp/efficiencie.exec.txt
+    section: "{{playbook_efficiencie_name}}-{{ansible_host_exec}}"
+    option: fin
+    values:
+      - "{{fin}}"
+    state: present
+  delegate_to: localhost
+
+- name: Ensure multiple values "beverage=coke" and "beverage=pepsi" are in section "[drinks]" in specified file
+  community.general.ini_file:
+    path: /tmp/efficiencie.exec.txt
+    section: "{{playbook_efficiencie_name}}-{{ansible_host_exec}}"
+    option: diferencia
+    values:
+      - "{{diferencia}}"
+    state: present
+  delegate_to: localhost
+
+- name: Ensure multiple values "beverage=coke" and "beverage=pepsi" are in section "[drinks]" in specified file
+  community.general.ini_file:
+    path: /tmp/efficiencie.exec.txt
+    section: "{{playbook_efficiencie_name}}-{{ansible_host_exec}}"
+    option: resultado
+    values:
+      - "{{result.failed}}"
+    state: present
+  delegate_to: localhost
+
+- name: Add info if ok execution
+  block:
+
+  - name: Get timer ok execution previous
+    set_fact: 
+      diferencia_previa: "{{ q('ansible.builtin.ini', 'ultima_ejecucion_ok_duracion', section=playbook_efficiencie_name+'-'+ansible_host_exec, file='/tmp/efficiencie.exec.txt', re=True) }} "
+
+  - name: Get percent execution time with previous execution
+    set_fact:
+      porcentaje: "{{(diferencia | int - diferencia_previa[0] | int ) / diferencia_previa[0] | int *100}}"
+    when: diferencia_previa and (diferencia_previa|length > 0) and (diferencia | int - diferencia_previa[0] | int) != 0
+
+  - name: Ensure multiple values "beverage=coke" and "beverage=pepsi" are in section "[drinks]" in specified file
+    community.general.ini_file:
+      path: /tmp/efficiencie.exec.txt
+      section: "{{playbook_efficiencie_name}}-{{ansible_host_exec}}"
+      option: porcentaje
+      values:
+        - "{{porcentaje}}"
+      state: present
+    delegate_to: localhost
+    when: porcentaje is defined
+
+  - name: Ensure multiple values "beverage=coke" and "beverage=pepsi" are in section "[drinks]" in specified file
+    community.general.ini_file:
+      path: /tmp/efficiencie.exec.txt
+      section: "{{playbook_efficiencie_name}}-{{ansible_host_exec}}"
+      option: porcentaje
+      values:
+        - "0"
+      state: present
+    delegate_to: localhost
+    when: porcentaje is undefined
+
+  - name: Ensure multiple values "beverage=coke" and "beverage=pepsi" are in section "[drinks]" in specified file
+    community.general.ini_file:
+      path: /tmp/efficiencie.exec.txt
+      section: "{{playbook_efficiencie_name}}-{{ansible_host_exec}}"
+      option: ultima_ejecucion_ok_duracion
+      values:
+        - "{{diferencia}}"
+      state: present
+    delegate_to: localhost
+    when: diferencia_previa is undefined or (diferencia_previa|length == 0) or (porcentaje is defined and porcentaje | int < 5 )
+
+
+  when: result is succeeded
+
+- name: Setting host facts using complex arguments
+  set_fact:
+    list_sections: "{{ list_sections+[ playbook_efficiencie_name+'-'+ansible_host_exec ] }}"
